@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">Weatherapp</string>
+    <string name="child_title">Sites info</string>
+    <string name="no_bluetooth_message">Your device does not have bluetooth.</string>
+    <string name="button_get_bonded">Choose from paired devices.</string>
+    <string name="button_get_discovery">Search and choose.</string>
+    <string name="checkbox_remember_mac">Remember and connect automatically</string>
+    <string name="bluetooth_enabled">Bluetooth enabled</string>
+    <string name="temperature">Temperature: \u0020</string>
+    <string name="pressure">Pressure: \u0020</string>
+    <string name="humidity">Humidity: \u0020</string>
+    <string name="mmHg">mm Hg</string>
+    <string name="bluetooth_cancelled">Bluetooth turning on cancelled</string>
+    <string name="connecting_message">Connecting&#8230;</string>
+    <string name="connect_method_failed">Connect() method failed</string>
+    <string name="socket_null">Socket==null</string>
+    <string name="error_input_stream">Error occurred when creating input stream</string>
+    <string name="input_stream_disconnected">Input stream was disconnected</string>
+    <string name="cancel_discovery">Cancel searching</string>
+    <string name="info_from_sites">See info from sites</string>
+    <string name="button_reconnect">reconnect</string>
+    <string name="wait_for_forecast"> Need more time to store data for forecast. Please wait. It takes not more than hour.</string>
+    <string name="error_enter_and_save_city">For making forecast please enter and mark "Remember city" in Info From Sites window</string>
+    <string name="gps_network_not_enabled"> GPS turned off. App needs this service for possibility to scan new Bluetooth devices</string>
+    <string name="open_location_settings">Open location settings</string>
+    <string name="Cancel">Cancel</string>
+
+    <string name="City_name">Enter your city name</string>
+    <string name="search">Search</string>
+    <string name="result_will_be_here">Result will be here</string>
+    <string name="other_error_message">"Oops something went wrong, please try again"</string>
+    <string name="unknown_city_error_message">"City not found"</string>
+    <string name="checkbox_remember_city">Remember city</string>
+    <string name="change_city">Change</string>
+</resources>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/hor_padding"
+    android:paddingEnd="@dimen/hor_padding"
+    android:paddingTop="1dp"
+    tools:context=".ChildActivity">
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp">
+            <EditText
+                android:id="@+id/et_input_field"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:hint="@string/City_name"
+                android:inputType="text"
+                android:padding="10dp"
+                android:textSize="25sp"/>
+            <Button
+                android:id="@+id/b_search"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/search"
+                android:textSize="20sp"/>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/tv_current_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/result_will_be_here"
+                android:textSize="30sp"
+                android:visibility="invisible"/>
+            <Button
+                android:id="@+id/b_change_city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="@string/change_city"
+                android:textSize="17sp"
+                android:visibility="invisible"/>
+        </LinearLayout>
+
+    </FrameLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="600dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_search_results_sin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@string/result_will_be_here"
+                android:textSize="30sp"
+                android:visibility="invisible" />
+            <TextView
+                android:id="@+id/tv_search_results_owm"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:text="@string/result_will_be_here"
+                android:textSize="30sp"
+                android:visibility="invisible" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_other_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:padding="1dp"
+            android:text="@string/other_error_message"
+            android:visibility="invisible"
+            />
+        <TextView
+            android:id="@+id/tv_unknown_city_error_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22dp"
+            android:padding="1dp"
+            android:text="@string/unknown_city_error_message"
+            android:visibility="invisible"
+            />
+
+        <ProgressBar
+            android:id="@+id/pb_loading"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true">
+
+        <CheckBox
+            android:id="@+id/cb_remember_city_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/checkbox_remember_city"
+            android:textSize="17sp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="left|center_vertical"
+            android:layout_marginBottom="10dp">
+        </CheckBox>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Back"
+            android:id="@+id/bt_back_to_main"
+            android:layout_gravity="right|center_vertical" />
+    </FrameLayout>
+</LinearLayout>
