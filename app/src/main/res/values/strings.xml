@@ -24,6 +24,7 @@
     <string name="gps_network_not_enabled"> GPS turned off. App needs this service for possibility to scan new Bluetooth devices</string>
     <string name="open_location_settings">Open location settings</string>
     <string name="Cancel">Cancel</string>
+    <string name="ble_not_supported">Your device does not support BLE</string>
 
     <string name="City_name">Enter your city name</string>
     <string name="search">Search</string>
