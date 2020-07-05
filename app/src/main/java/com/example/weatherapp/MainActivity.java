@@ -70,8 +70,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnCancelDiscovery;
     Button btnReconnect;
     static final UUID MY_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    private AcceptThread mAcceptThread;
-    private ConnectedThread mConnectedThread;
+    //private AcceptThread mAcceptThread;
+    //private ConnectedThread mConnectedThread;
     private CheckBox mCheckBox;
     //Handler handler7 = new Handler();
     String dest_mac;
@@ -256,27 +256,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        if (bluetoothAdapter.isDiscovering()) {
-            bluetoothAdapter.cancelDiscovery();
-        }
 
-
-        //if (bluetoothAdapter.startDiscovery()==true){
-        //Toast.makeText(this, "DISCOVERY STARTED", Toast.LENGTH_LONG).show();
-        //}
-        //bluetoothAdapter.startDiscovery();
-        /////////////////////////////////////////
-        /*
-        IntentFilter filter = new IntentFilter();
-
-        filter.addAction(BluetoothDevice.ACTION_FOUND);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED);
-        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-
-        registerReceiver(mReceiver, filter);
-        bluetoothAdapter.startDiscovery();
-
-         */
 
         sPref1 = getPreferences(MODE_PRIVATE);
         String savedText = sPref1.getString(SAVED_TEXT,null);
@@ -285,8 +265,8 @@ public class MainActivity extends AppCompatActivity {
             mCheckBox.setVisibility(View.INVISIBLE);
             dest_mac = savedText;
             //Toast.makeText(getActivity(), dest_mac, Toast.LENGTH_LONG).show();
-            mAcceptThread = new AcceptThread();
-            mAcceptThread.start();
+            //mAcceptThread = new AcceptThread();
+            //mAcceptThread.start();
         }
 
 
@@ -314,6 +294,7 @@ public class MainActivity extends AppCompatActivity {
                 bluetoothAdapter.cancelDiscovery();
             }
         });
+        /*
         btnReconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -339,79 +320,10 @@ public class MainActivity extends AppCompatActivity {
                 mAcceptThread.start();
             }
         });
-        h = new Handler() {
-            public void handleMessage(android.os.Message msg) {
-                switch (msg.what) {
-                    case RECIEVE_MESSAGE:                                                   // if receive massage
-                        sb.delete(0, sb.length());
-                        //byte[] readBuf = (byte[]) msg.obj;
-                        String readMessage = (String) msg.obj;
-                        int message_len = readMessage.length();
-                        if (message_len > 20){
-                            int endPos = readMessage.indexOf("\n");
-                            sb.append(readMessage.substring(endPos+1,endPos+1+12));
-                        }
-                        //String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
-                        //Date currentDate = new Date();
-                        //DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-                        //String timeText = timeFormat.format(currentDate);
-                        sb.append(readMessage);                                                // append string
-                        //sb.append("---");
-                        //sb.append(timeText);
-                        //message_bar.setText(sb);
-                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
-                        //Toast.makeText(MainActivity.this, sb, Toast.LENGTH_LONG).show();
-                        if (endOfLineIndex ==10) {                                            // if end-of-line,
-                            //Toast.makeText(MainActivity.this, strIncom, Toast.LENGTH_LONG).show();
-                            String temp = sb.substring(0 , 2);// extract string
-                            String press = sb.substring(2 , 5);
-                            String hum = sb.substring(5 , 7);
-                            String avg_press = sb.substring(7, endOfLineIndex);
-                            sb.delete(0, sb.length());                                      // and clear
 
-                            if (forecast_flag == false && avg_press.equals("000")){
-                                forecast.setText(R.string.wait_for_forecast);
-                            }else if (forecast_flag == false && !avg_press.equals("000")){
-                                SharedPreferences sPref_city = getSharedPreferences("pref", Context.MODE_PRIVATE);
-                                String savedText = sPref_city.getString("city",null);
-                                if (savedText == null) {
-                                    forecast.setText(R.string.error_enter_and_save_city);
-                                }else {
-                                    prepare_forecast_data(press,avg_press,savedText);
-                                    forecast_flag = true;
-                                }
-                            }
+         */
 
-                            String mystring = getResources().getString(R.string.temperature) + temp + "°С";
-                            message_bar.setText(mystring);            // update TextView
-                            mystring = getResources().getString(R.string.pressure) + press + getResources().getString(R.string.mmHg);
-                            pressure.setText(mystring);
-                            mystring = getResources().getString(R.string.humidity) + hum + "%";
-                            humidity.setText(mystring);
 
-                            //btnOff.setEnabled(true);
-                            //btnOn.setEnabled(true);
-                        } else if (endOfLineIndex ==9) {
-                            String temp = sb.substring(0 , 1);// extract string
-                            String press = sb.substring(1 , 4);
-                            String hum = sb.substring(4 , 6 );
-                            String avg_press = sb.substring(6,endOfLineIndex);
-                            sb.delete(0, sb.length());                                      // and clear
-                            String mystring = getResources().getString(R.string.temperature) + temp + "°С";
-                            message_bar.setText(mystring);            // update TextView
-                            mystring = getResources().getString(R.string.pressure) + press + getResources().getString(R.string.mmHg);
-                            pressure.setText(mystring);
-                            mystring = getResources().getString(R.string.humidity) + hum + "%";
-                            humidity.setText(mystring);
-
-                        }
-
-                        //sb.delete(0, sb.length());
-                        //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
-                        break;
-                }
-            };
-        };
 
     }
 
@@ -446,8 +358,8 @@ public class MainActivity extends AppCompatActivity {
                     dest_mac = selectedItem.substring(selectedItem.length() - 17, selectedItem.length());
                     saveMac();
                     //Toast.makeText(MainActivity.this, dest_mac, Toast.LENGTH_LONG).show();
-                    mAcceptThread = new AcceptThread();
-                    mAcceptThread.start();
+                    //mAcceptThread = new AcceptThread();
+                    //mAcceptThread.start();
                     ListView listView = findViewById(R.id.lv_listViewDeices);
                     listView.setVisibility(View.INVISIBLE);
 
@@ -484,8 +396,8 @@ public class MainActivity extends AppCompatActivity {
             if (savedText != null) {
                 dest_mac = savedText;
                 //Toast.makeText(getActivity(), dest_mac, Toast.LENGTH_LONG).show();
-                mAcceptThread = new AcceptThread();
-                mAcceptThread.start();
+                //mAcceptThread = new AcceptThread();
+                //mAcceptThread.start();
             }
         } else {
             message_bar.setText(R.string.bluetooth_cancelled);
@@ -550,8 +462,8 @@ public class MainActivity extends AppCompatActivity {
                         dest_mac = selectedItem.substring(selectedItem.length() - 17, selectedItem.length());
                         saveMac();
                         //Toast.makeText(MainActivity.this, dest_mac, Toast.LENGTH_LONG).show();
-                        mAcceptThread = new AcceptThread();
-                        mAcceptThread.start();
+                        //mAcceptThread = new AcceptThread();
+                        //mAcceptThread.start();
                         ListView listView = findViewById(R.id.lv_listViewDeices);
                         listView.setVisibility(View.INVISIBLE);
 
@@ -866,33 +778,7 @@ public class MainActivity extends AppCompatActivity {
 
         return returnString;
     }
-    //////////////////////////////
-    /*
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            //Toast.makeText(MainActivity.this, "HA-HA11112", Toast.LENGTH_LONG).show();
 
-            if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
-                //discovery starts, we can show progress dialog or perform other tasks
-                Toast.makeText(MainActivity.this, "Discovery started", Toast.LENGTH_LONG).show();
-
-            } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
-                //discovery finishes, dismis progress dialog
-                Toast.makeText(MainActivity.this, "Discovery finished", Toast.LENGTH_LONG).show();
-            } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {
-                //bluetooth device found
-                //Toast.makeText(MainActivity.this, "HA-HA11112", Toast.LENGTH_LONG).show();
-                BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-
-                //showToast("Found device " + device.getName());
-                Toast.makeText(MainActivity.this, "Found device " + device.getName(), Toast.LENGTH_LONG).show();
-
-            }
-        }
-    };
-
-     */
 
     @Override
     public void onDestroy() {
@@ -931,254 +817,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-    private class AcceptThread extends Thread {
-        private final BluetoothServerSocket mmServerSocket;
-        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-
-        public AcceptThread() {
-
-
-            // используем вспомогательную переменную, которую в дальнейшем
-            // свяжем с mmServerSocket,
-
-            BluetoothServerSocket tmp = null;
-
-            message_bar.setText(R.string.connecting_message);
-            try {
-                // MY_UUID это UUID нашего приложения, это же значение
-                // используется в клиентском приложении
-
-                tmp = bluetoothAdapter.listenUsingRfcommWithServiceRecord("bluetotthconnect", MY_UUID);
-            } catch (IOException e) {
-
-                Handler handler1 = new Handler();
-                handler1.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, "Socket's listen() method failed", Toast.LENGTH_SHORT).show();
-                    }
-                }, 0);
-            }
-
-
-            mmServerSocket = tmp;
-
-
-        }
-
-
-        public void run() {
-
-            BluetoothSocket socket;
-
-            // ждем пока не произойдет ошибка или не
-            // будет возвращен сокет
-            while (true) {
-                try {
-                    //runOnUiThread(new Runnable() {
-                    //  public void run() {
-
-                    //Toast.makeText(MainActivity.this, "try to connect", Toast.LENGTH_LONG).show();
-                    //}
-                    //});
-                    bluetoothAdapter.cancelDiscovery();
-                    String address = dest_mac;
-                    BluetoothDevice remote_dev = bluetoothAdapter.getRemoteDevice(address);
-                    socket = remote_dev.createInsecureRfcommSocketToServiceRecord(MY_UUID);
-                    BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
-                    socket.connect();
-                    //runOnUiThread(new Runnable() {
-                    //  public void run() {
-
-                    // Toast.makeText(MainActivity.this, "connect() finished", Toast.LENGTH_LONG).show();
-                    //}
-                    //});
-                } catch (IOException e) {
-
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-                            message_bar.setText(R.string.connect_method_failed);
-                            Toast.makeText(MainActivity.this, "connect() method failed", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                    break;
-                }
-                // если соединение было подтверждено
-                if (socket == null) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-                            message_bar.setText(R.string.socket_null);
-                            Toast.makeText(MainActivity.this, "socket==null", Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-                if (socket != null) {
-                    // управлчем соединением (в отдельном потоке)
-                    //manageConnectedSocket(socket);
-                    mConnectedThread = new ConnectedThread(socket);
-                    mConnectedThread.start();
-
-                    //runOnUiThread(new Runnable() {
-                    //  public void run() {
-
-                    //  Toast.makeText(MainActivity.this, "connection established successfully", Toast.LENGTH_LONG).show();
-                    //}
-                    //});
-
-                    /*
-                    try {
-                        //mmServerSocket.close();
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-
-                                Toast.makeText(MainActivity.this, "socket closed", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    } catch (IOException e) {
-                        runOnUiThread(new Runnable() {
-                            public void run() {
-
-                                Toast.makeText(MainActivity.this, "could not close socket", Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }*/
-
-                    break;
-                }
-            }
-
-
-        }
-
-
-        /**
-         * отмена ожидания сокета
-         */
-        public void cancel() {
-            try {
-                mmServerSocket.close();
-                //mConnectedThread.cancel();
-
-
-            } catch (IOException | NullPointerException e) {
-
-            }
-        }
-    }
-
-
-    private class ConnectedThread extends Thread {
-        private final BluetoothSocket mmSocket;
-        private final InputStream mmInStream;
-        private final OutputStream mmOutStream;
-        private byte[] mmBuffer; // mmBuffer store for the stream
-
-        public ConnectedThread(BluetoothSocket socket) {
-            mmSocket = socket;
-            InputStream tmpIn = null;
-            OutputStream tmpOut = null;
-
-            // Get the input and output streams; using temp objects because
-            // member streams are final.
-            try {
-                tmpIn = socket.getInputStream();
-            } catch (IOException e) {
-
-                runOnUiThread(new Runnable() {
-                    public void run() {
-
-                        message_bar.setText(R.string.error_input_stream);
-                        Toast.makeText(MainActivity.this, "Error occurred when creating input stream", Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-             /*
-            try {
-                tmpOut = socket.getOutputStream();
-            } catch (IOException e) {
-                runOnUiThread(new Runnable() {
-                    public void run() {
-
-                        Toast.makeText(MainActivity.this, "Error occurred when creating output stream", Toast.LENGTH_LONG).show();
-                    }
-                });
-
-            }*/
-
-            mmInStream = tmpIn;
-            mmOutStream = tmpOut;
-        }
-
-        public void run() {
-            mmBuffer = new byte[1024];
-            int numBytes;
-            // bytes returned from read()
-            StringBuilder readMessage = new StringBuilder();
-            // Keep listening to the InputStream until an exception occurs.
-            while (true) {
-
-                try {
-                    numBytes = mmInStream.read(mmBuffer);
-                    String read = new String(mmBuffer, 0, numBytes);
-                    readMessage.append(read);
-
-                    if (read.contains("\n")) {
-                        //Date currentDate = new Date();
-                        //DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-                        //String timeText = timeFormat.format(currentDate);
-                        h.obtainMessage(RECIEVE_MESSAGE, numBytes, -1, readMessage.toString()).sendToTarget();
-                        readMessage.setLength(0);
-                    }
-                    // Read from the InputStream.
-                    /*
-                    numBytes = mmInStream.read(mmBuffer);
-                    //h.obtainMessage(RECIEVE_MESSAGE, numBytes, -1, mmBuffer).sendToTarget();
-                    Message readMsg = h.obtainMessage(
-                            RECIEVE_MESSAGE, numBytes, -1,
-                            mmBuffer);
-                    readMsg.sendToTarget();
-
-                     */
-                    //runOnUiThread(new Runnable() {
-                    //  public void run() {
-
-                    //Toast.makeText(MainActivity.this, numBytes, Toast.LENGTH_LONG).show();
-                    //}
-                    //});
-                    // Send the obtained bytes to the UI activity.
-                    //Message readMsg = handler.obtainMessage(
-                    //       MessageConstants.MESSAGE_READ, numBytes, -1,
-                    //     mmBuffer);
-                    //readMsg.sendToTarget();
-                } catch (IOException e) {
-                    runOnUiThread(new Runnable() {
-                        public void run() {
-
-                            message_bar.setText(R.string.input_stream_disconnected);
-                            //Toast.makeText(getActivity(), "Input stream was disconnected", Toast.LENGTH_LONG).show();
-                        }
-                    });
-
-                    break;
-                }
-            }
-
-        }
-
-        // Call this method from the main activity to shut down the connection.
-        public void cancel() {
-            try {
-                mmSocket.close();
-            } catch (NullPointerException | IOException e) {
-                //Log.e(TAG, "Could not close the connect socket", e);
-            }
-        }
-    }
 
 }
