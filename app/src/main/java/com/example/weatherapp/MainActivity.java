@@ -555,14 +555,40 @@ public class MainActivity extends AppCompatActivity {
                             //Log.i(TAG, "Connected to GATT server.");
                             //Log.i(TAG, "Attempting to start service discovery:" +bluetoothGatt.discoverServices());
                             gatt.discoverServices();
-                            /*
+                            //try {
+                           //     TimeUnit.SECONDS.sleep(2);
+                            //}catch (InterruptedException e){
+
+                            //}
+
+                            //getDeviceInformation();
+
                             BluetoothGattCharacteristic characteristic =
                                     gatt.getService(HM_SERVICE_UUID)
                                             .getCharacteristic(HM_CHARACTERISTIC_UUID);
 
-                            gatt.readCharacteristic(characteristic);
+                            Boolean is_character_read = gatt.readCharacteristic(characteristic);
 
-                             */
+                            if (is_character_read == true){
+                                Handler handler1 = new Handler(Looper.getMainLooper());
+                                handler1.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,"READ CHAACTER SUCCESS",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }else {
+                                Handler handler2 = new Handler(Looper.getMainLooper());
+                                handler2.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,"READ CHAACTER FAIL",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
 
                         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                             intentAction = ACTION_GATT_DISCONNECTED;
@@ -603,7 +629,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-                    /*
+
                     @Override
                     // Result of a characteristic read operation
                     public void onCharacteristicRead(BluetoothGatt gatt,
@@ -624,34 +650,9 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-                     */
 
-                    List<BluetoothGattCharacteristic> characteristics = new ArrayList<>();
-                    boolean isGettingDeviceInformation;
-                    int count = 0;
 
-                    @Override
-                    public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
-                        String value = characteristic.getStringValue(0);
-                        Log.e("TAG", "onCharacteristicRead: " + value + " UUID " + characteristic.getUuid().toString() );
-                        if(isGettingDeviceInformation) {
-                            if(count < characteristics.size()) {
-                                count++;
-                                bluetoothGatt.setCharacteristicNotification(characteristics.get(count), true);
-                                bluetoothGatt.readCharacteristic(characteristics.get(count));
-                            } else {
-                                isGettingDeviceInformation = false;
-                            }
-                        }
-                    }
 
-                    private void getDeviceInformation() {
-                        BluetoothGattService deviceInfoService = bluetoothGatt.getService(HM_SERVICE_UUID);
-                        BluetoothGattCharacteristic deviceSerialNumber, deviceHardwareRevision, deviceSoftwareRevision;
-                        characteristics = bluetoothGatt.getService(HM_CHARACTERISTIC_UUID).getCharacteristics();
-                        bluetoothGatt.setCharacteristicNotification(characteristics.get(count), true);
-                        bluetoothGatt.readCharacteristic(characteristics.get(count));
-                    }
 
                     /*
                     @Override
