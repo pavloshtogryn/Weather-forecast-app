@@ -543,14 +543,14 @@ public class MainActivity extends AppCompatActivity {
                             intentAction = ACTION_GATT_CONNECTED;
                             connectionState = STATE_CONNECTED;
                             broadcastUpdate(intentAction);
-                            Handler handler = new Handler(Looper.getMainLooper());
-                            handler.post(new Runnable() {
+                            //Handler handler = new Handler(Looper.getMainLooper());
+                            //handler.post(new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this,"Connected to GATT server.",Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                               // @Override
+                               // public void run() {
+                              //      Toast.makeText(MainActivity.this,"Connected to GATT server.",Toast.LENGTH_SHORT).show();
+                               // }
+                            //});
 
                             //Log.i(TAG, "Connected to GATT server.");
                             //Log.i(TAG, "Attempting to start service discovery:" +bluetoothGatt.discoverServices());
@@ -563,31 +563,11 @@ public class MainActivity extends AppCompatActivity {
 
                             //getDeviceInformation();
 
-                            BluetoothGattCharacteristic characteristic =
-                                    gatt.getService(HM_SERVICE_UUID)
-                                            .getCharacteristic(HM_CHARACTERISTIC_UUID);
 
-                            Boolean is_character_read = gatt.readCharacteristic(characteristic);
 
-                            if (is_character_read == true){
-                                Handler handler1 = new Handler(Looper.getMainLooper());
-                                handler1.post(new Runnable() {
 
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this,"READ CHAACTER SUCCESS",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }else {
-                                Handler handler2 = new Handler(Looper.getMainLooper());
-                                handler2.post(new Runnable() {
 
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this,"READ CHAACTER FAIL",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
+
 
 
                         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
@@ -612,7 +592,64 @@ public class MainActivity extends AppCompatActivity {
                     // New services discovered
                     public void onServicesDiscovered(BluetoothGatt gatt, final int status) {
                         if (status == BluetoothGatt.GATT_SUCCESS) {
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,"DISCOVERED SUCCESFULLY",Toast.LENGTH_SHORT).show();
+                                }
+                            });
                             broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
+
+                            BluetoothGattCharacteristic characteristic =
+                                    gatt.getService(HM_SERVICE_UUID)
+                                            .getCharacteristic(HM_CHARACTERISTIC_UUID);
+
+                            if (characteristic != null){
+                                Handler handler1 = new Handler(Looper.getMainLooper());
+                                handler1.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,"SUCCESS GETTING CHARACTER",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }else if (characteristic == null){
+                                Handler handler2 = new Handler(Looper.getMainLooper());
+                                handler2.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,"FAIL GETTING CHARACTER",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+
+                            Boolean is_character_read = gatt.readCharacteristic(characteristic);
+                            if (is_character_read == true){
+                                Handler handler1 = new Handler(Looper.getMainLooper());
+                                handler1.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,"READ CHAACTER SUCCESS",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }else {
+                                Handler handler2 = new Handler(Looper.getMainLooper());
+                                handler2.post(new Runnable() {
+
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(MainActivity.this,"READ CHAACTER FAIL",Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+
+
+
                         } else {
 
                             Handler handler = new Handler(Looper.getMainLooper());
