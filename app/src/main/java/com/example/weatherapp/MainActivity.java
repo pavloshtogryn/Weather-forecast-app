@@ -752,9 +752,51 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"IN BROADCST UPDATE",Toast.LENGTH_SHORT).show();
             }
         });
+
+        final byte[] data = characteristic.getValue();
+        if (data != null && data.length > 0) {
+
+
+            final StringBuilder stringBuilder = new StringBuilder(data.length);
+            for(byte byteChar : data)
+                stringBuilder.append(String.format("%02X ", byteChar));
+            intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
+                    stringBuilder.toString());
+
+            final String dataLenght = String.valueOf(data.length);
+            Handler handler1 = new Handler(Looper.getMainLooper());
+            handler1.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,stringBuilder.toString(),Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Handler handler2 = new Handler(Looper.getMainLooper());
+            handler2.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"DATA == NULL",Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+
         // This is special handling for the Heart Rate Measurement profile. Data
         // parsing is carried out as per profile specifications.
+        /*
         if (HM_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
+            Handler handler1 = new Handler(Looper.getMainLooper());
+            handler1.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"EQUALS",Toast.LENGTH_SHORT).show();
+                }
+            });
+
+
             int flag = characteristic.getProperties();
             int format = -1;
             if ((flag & 0x01) != 0) {
@@ -768,17 +810,31 @@ public class MainActivity extends AppCompatActivity {
             //Log.d(TAG, String.format("Received heart rate: %d", heartRate));
             intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
         } else {
+            Handler handler2 = new Handler(Looper.getMainLooper());
+            handler2.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this,"NOT EQUALS",Toast.LENGTH_SHORT).show();
+                }
+            });
+
             // For all other profiles, writes the data formatted in HEX.
             final byte[] data = characteristic.getValue();
             if (data != null && data.length > 0) {
+                Toast.makeText(MainActivity.this,"DATA NOT NULL",Toast.LENGTH_SHORT).show();
                 final StringBuilder stringBuilder = new StringBuilder(data.length);
                 for(byte byteChar : data)
                     stringBuilder.append(String.format("%02X ", byteChar));
                 intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
                         stringBuilder.toString());
-
+            } else {
+                Toast.makeText(MainActivity.this,"DATA == NULL",Toast.LENGTH_SHORT).show();
             }
+
+
         }
+        */
         sendBroadcast(intent);
     }
 
