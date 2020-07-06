@@ -13,6 +13,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
+import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothServerSocket;
@@ -29,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
 import android.view.View;
@@ -77,7 +79,8 @@ public class MainActivity extends AppCompatActivity {
     Button btnDiscovery;
     Button btnCancelDiscovery;
     Button btnReconnect;
-    static final UUID HM_UUID = UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
+    static final UUID HM_SERVICE_UUID = UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");
+    static  final  UUID HM_CHARACTERISTIC_UUID = UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
     //private AcceptThread mAcceptThread;
     //private ConnectedThread mConnectedThread;
     private CheckBox mCheckBox;
@@ -536,12 +539,31 @@ public class MainActivity extends AppCompatActivity {
                             intentAction = ACTION_GATT_CONNECTED;
                             connectionState = STATE_CONNECTED;
                             broadcastUpdate(intentAction);
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,"Connected to GATT server.",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                             //Log.i(TAG, "Connected to GATT server.");
                             //Log.i(TAG, "Attempting to start service discovery:" +bluetoothGatt.discoverServices());
 
                         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                             intentAction = ACTION_GATT_DISCONNECTED;
                             connectionState = STATE_DISCONNECTED;
+
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,"Disconnected from GATT server.",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                             /* Log.i(TAG, "Disconnected from GATT server."); */
                             broadcastUpdate(intentAction);
                         }
@@ -549,22 +571,75 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     // New services discovered
-                    public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+                    public void onServicesDiscovered(BluetoothGatt gatt, final int status) {
                         if (status == BluetoothGatt.GATT_SUCCESS) {
                             broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
                         } else {
+
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,status,Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                            // Log.w(TAG, "onServicesDiscovered received: " + status);
                         }
                     }
+
+
 
                     @Override
                     // Result of a characteristic read operation
                     public void onCharacteristicRead(BluetoothGatt gatt,
                                                      BluetoothGattCharacteristic characteristic,
                                                      int status) {
+                        Handler handler1 = new Handler(Looper.getMainLooper());
+                        handler1.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this,"onREAD",Toast.LENGTH_SHORT).show();
+                            }
+                        });
                         if (status == BluetoothGatt.GATT_SUCCESS) {
+
+                            Handler handler = new Handler(Looper.getMainLooper());
+                            handler.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,"ACTION_DATA_AVAILABLE",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
                         }
+                    }
+
+                    @Override
+                    public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status){
+                        BluetoothGattCharacteristic characteristic =
+                                gatt.getService(HM_SERVICE_UUID)
+                                        .getCharacteristic(HM_CHARACTERISTIC_UUID);
+                        characteristic.setValue(new byte[]{1, 1});
+                        gatt.writeCharacteristic(characteristic);
+                    }
+
+                    @Override
+                    public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+
+                        Handler handler = new Handler(Looper.getMainLooper());
+                        handler.post(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Toast.makeText(MainActivity.this,"HELLO",Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        //processData(characteristic.getValue());
                     }
 
                 };
@@ -576,17 +651,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,action,Toast.LENGTH_SHORT).show();
+            }
+        });
         sendBroadcast(intent);
     }
+
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
 
+        Handler handler = new Handler(Looper.getMainLooper());
+        handler.post(new Runnable() {
+
+            @Override
+            public void run() {
+                Toast.makeText(MainActivity.this,"IN BROADCST UPDATE",Toast.LENGTH_SHORT).show();
+            }
+        });
         // This is special handling for the Heart Rate Measurement profile. Data
         // parsing is carried out as per profile specifications.
-        if (HM_UUID.equals(characteristic.getUuid())) {
+        if (HM_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
             int flag = characteristic.getProperties();
             int format = -1;
             if ((flag & 0x01) != 0) {
@@ -608,10 +701,44 @@ public class MainActivity extends AppCompatActivity {
                     stringBuilder.append(String.format("%02X ", byteChar));
                 intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
                         stringBuilder.toString());
+
             }
         }
         sendBroadcast(intent);
     }
+
+    private final BroadcastReceiver gattUpdateReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            final String action = intent.getAction();
+            if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
+                //connected = true;
+                //updateConnectionState(R.string.connected);
+                invalidateOptionsMenu();
+            } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
+                //connected = false;
+                //updateConnectionState(R.string.disconnected);
+                //invalidateOptionsMenu();
+                //clearUI();
+            } else if (BluetoothLeService.
+                    ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
+                // Show all the supported services and characteristics on the
+                // user interface.
+                //displayGattServices(bluetoothLeService.getSupportedGattServices());
+            } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
+                final String recv = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
+                Handler handler = new Handler(Looper.getMainLooper());
+                handler.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        Toast.makeText(MainActivity.this,recv,Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            }
+        }
+    };
 
     public void make_forecast(String wind){
 
