@@ -14,6 +14,7 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
+import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.bluetooth.BluetoothServerSocket;
@@ -33,6 +34,7 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.Settings;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -57,7 +59,9 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
@@ -550,6 +554,15 @@ public class MainActivity extends AppCompatActivity {
 
                             //Log.i(TAG, "Connected to GATT server.");
                             //Log.i(TAG, "Attempting to start service discovery:" +bluetoothGatt.discoverServices());
+                            gatt.discoverServices();
+                            /*
+                            BluetoothGattCharacteristic characteristic =
+                                    gatt.getService(HM_SERVICE_UUID)
+                                            .getCharacteristic(HM_CHARACTERISTIC_UUID);
+
+                            gatt.readCharacteristic(characteristic);
+
+                             */
 
                         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                             intentAction = ACTION_GATT_DISCONNECTED;
@@ -590,20 +603,12 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
-
+                    /*
                     @Override
                     // Result of a characteristic read operation
                     public void onCharacteristicRead(BluetoothGatt gatt,
                                                      BluetoothGattCharacteristic characteristic,
                                                      int status) {
-                        Handler handler1 = new Handler(Looper.getMainLooper());
-                        handler1.post(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Toast.makeText(MainActivity.this,"onREAD",Toast.LENGTH_SHORT).show();
-                            }
-                        });
                         if (status == BluetoothGatt.GATT_SUCCESS) {
 
                             Handler handler = new Handler(Looper.getMainLooper());
@@ -619,6 +624,36 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
+                     */
+
+                    List<BluetoothGattCharacteristic> characteristics = new ArrayList<>();
+                    boolean isGettingDeviceInformation;
+                    int count = 0;
+
+                    @Override
+                    public void onCharacteristicRead(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+                        String value = characteristic.getStringValue(0);
+                        Log.e("TAG", "onCharacteristicRead: " + value + " UUID " + characteristic.getUuid().toString() );
+                        if(isGettingDeviceInformation) {
+                            if(count < characteristics.size()) {
+                                count++;
+                                bluetoothGatt.setCharacteristicNotification(characteristics.get(count), true);
+                                bluetoothGatt.readCharacteristic(characteristics.get(count));
+                            } else {
+                                isGettingDeviceInformation = false;
+                            }
+                        }
+                    }
+
+                    private void getDeviceInformation() {
+                        BluetoothGattService deviceInfoService = bluetoothGatt.getService(HM_SERVICE_UUID);
+                        BluetoothGattCharacteristic deviceSerialNumber, deviceHardwareRevision, deviceSoftwareRevision;
+                        characteristics = bluetoothGatt.getService(HM_CHARACTERISTIC_UUID).getCharacteristics();
+                        bluetoothGatt.setCharacteristicNotification(characteristics.get(count), true);
+                        bluetoothGatt.readCharacteristic(characteristics.get(count));
+                    }
+
+                    /*
                     @Override
                     public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status){
                         BluetoothGattCharacteristic characteristic =
@@ -641,6 +676,8 @@ public class MainActivity extends AppCompatActivity {
                         });
                         //processData(characteristic.getValue());
                     }
+
+                     */
 
                 };
 
