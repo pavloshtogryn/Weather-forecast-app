@@ -57,6 +57,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -704,20 +705,30 @@ public class MainActivity extends AppCompatActivity {
                         final byte[] data = characteristic.getValue();
                         if (data != null && data.length > 0) {
 
+                            final String str = new String(data, StandardCharsets.UTF_8);
+                            //String hex = new String(data);
+                            //StringBuilder output = new StringBuilder();
+                            //for (int i = 0; i < hex.length(); i+=2) {
+                            //    String str = hex.substring(i, i+2);
+                            //    output.append((char)Integer.parseInt(str, 16));
+                            //}
+                            //final String recv = output.toString().trim();
 
-                            final StringBuilder stringBuilder = new StringBuilder(data.length);
-                            for(byte byteChar : data)
-                                stringBuilder.append(String.format("%02X ", byteChar));
+                            //final StringBuilder stringBuilder = new StringBuilder(data.length);
+                            //for(byte byteChar : data)
+                             //   stringBuilder.append(String.format("%08x ", byteChar));
+
+
                             //intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
-                             //       stringBuilder.toString());
+                             //      stringBuilder.toString());
 
-                            final String dataLenght = String.valueOf(data.length);
+                            //final String dataLenght = String.valueOf(data.length);
                             Handler handler1 = new Handler(Looper.getMainLooper());
                             handler1.post(new Runnable() {
 
                                 @Override
                                 public void run() {
-                                    Toast.makeText(MainActivity.this,stringBuilder.toString(),Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this,str,Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
