@@ -606,6 +606,15 @@ public class MainActivity extends AppCompatActivity {
                                     gatt.getService(HM_SERVICE_UUID)
                                             .getCharacteristic(HM_CHARACTERISTIC_UUID);
 
+                            //private BluetoothGatt bluetoothGatt;
+                            //BluetoothGattCharacteristic characteristic;
+                            boolean enabled=true;
+
+                            gatt.setCharacteristicNotification(characteristic, enabled);
+
+                            BluetoothGattDescriptor descriptor = characteristic.getDescriptor(HM_CHARACTERISTIC_UUID);
+                            descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                            gatt.writeDescriptor(descriptor);
                             if (characteristic != null){
                                 Handler handler1 = new Handler(Looper.getMainLooper());
                                 handler1.post(new Runnable() {
@@ -688,7 +697,40 @@ public class MainActivity extends AppCompatActivity {
                     }
 
 
+                    @Override
+                    public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
 
+                        //processData(characteristic.getValue());
+                        final byte[] data = characteristic.getValue();
+                        if (data != null && data.length > 0) {
+
+
+                            final StringBuilder stringBuilder = new StringBuilder(data.length);
+                            for(byte byteChar : data)
+                                stringBuilder.append(String.format("%02X ", byteChar));
+                            //intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
+                             //       stringBuilder.toString());
+
+                            final String dataLenght = String.valueOf(data.length);
+                            Handler handler1 = new Handler(Looper.getMainLooper());
+                            handler1.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,stringBuilder.toString(),Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Handler handler2 = new Handler(Looper.getMainLooper());
+                            handler2.post(new Runnable() {
+
+                                @Override
+                                public void run() {
+                                    Toast.makeText(MainActivity.this,"DATA == NULL",Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+                    }
 
 
                     /*
