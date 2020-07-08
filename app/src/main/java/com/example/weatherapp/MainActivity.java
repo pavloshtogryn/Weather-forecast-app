@@ -290,6 +290,7 @@ public class MainActivity extends AppCompatActivity {
             BluetoothLeService BluetoothLeServiceClass;
             BluetoothLeServiceClass = new BluetoothLeService();
             BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
+            message_bar.setText(R.string.connecting_message);
         }
 
 
@@ -444,6 +445,7 @@ public class MainActivity extends AppCompatActivity {
                     BluetoothLeServiceClass = new BluetoothLeService();
                     BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
 
+                    message_bar.setText(R.string.connecting_message);
                     ListView listView = findViewById(R.id.lv_listViewDeices);
                     listView.setVisibility(View.INVISIBLE);
 
@@ -482,6 +484,14 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(getActivity(), dest_mac, Toast.LENGTH_LONG).show();
                 //mAcceptThread = new AcceptThread();
                 //mAcceptThread.start();
+
+                final BluetoothAdapter bluetoothAdapter1 = BluetoothAdapter.getDefaultAdapter();
+                bluetoothAdapter1.cancelDiscovery();
+                BluetoothDevice device = bluetoothAdapter1.getRemoteDevice(dest_mac);
+                BluetoothLeService BluetoothLeServiceClass;
+                BluetoothLeServiceClass = new BluetoothLeService();
+                BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
+                message_bar.setText(R.string.connecting_message);
             }
         } else {
             message_bar.setText(R.string.bluetooth_cancelled);
@@ -556,6 +566,7 @@ public class MainActivity extends AppCompatActivity {
                         BluetoothLeServiceClass = new BluetoothLeService();
                         BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
 
+                        message_bar.setText(R.string.connecting_message);
                         ListView listView = findViewById(R.id.lv_listViewDeices);
                         listView.setVisibility(View.INVISIBLE);
 
@@ -609,6 +620,15 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onConnectionStateChange(BluetoothGatt gatt, int status,
                                                         int newState) {
+
+                        Handler handler3 = new Handler(Looper.getMainLooper());
+                        handler3.post(new Runnable() {
+
+                         @Override
+                         public void run() {
+                              Toast.makeText(MainActivity.this,"in onConnectionStateChange",Toast.LENGTH_SHORT).show();
+                         }
+                        });
                         String intentAction;
                         if (newState == BluetoothProfile.STATE_CONNECTED) {
                             intentAction = ACTION_GATT_CONNECTED;
