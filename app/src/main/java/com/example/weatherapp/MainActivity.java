@@ -667,6 +667,7 @@ public class MainActivity extends AppCompatActivity {
                     // New services discovered
                     public void onServicesDiscovered(BluetoothGatt gatt, final int status) {
                         if (status == BluetoothGatt.GATT_SUCCESS) {
+                            /*
                             Handler handler = new Handler(Looper.getMainLooper());
                             handler.post(new Runnable() {
 
@@ -675,6 +676,8 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"DISCOVERED SUCCESFULLY",Toast.LENGTH_SHORT).show();
                                 }
                             });
+
+                             */
                             broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
 
                             BluetoothGattCharacteristic characteristic =
@@ -690,6 +693,7 @@ public class MainActivity extends AppCompatActivity {
                             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(HM_CHARACTERISTIC_UUID);
                             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                             gatt.writeDescriptor(descriptor);
+                            /*
                             if (characteristic != null){
                                 Handler handler1 = new Handler(Looper.getMainLooper());
                                 handler1.post(new Runnable() {
@@ -709,9 +713,10 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-
+                            */
 
                             Boolean is_character_read = gatt.readCharacteristic(characteristic);
+                            /*
                             if (is_character_read == true){
                                 Handler handler1 = new Handler(Looper.getMainLooper());
                                 handler1.post(new Runnable() {
@@ -732,7 +737,7 @@ public class MainActivity extends AppCompatActivity {
                                 });
                             }
 
-
+                            */
 
                         } else {
 
@@ -757,7 +762,7 @@ public class MainActivity extends AppCompatActivity {
                                                      BluetoothGattCharacteristic characteristic,
                                                      int status) {
                         if (status == BluetoothGatt.GATT_SUCCESS) {
-
+                            /*
                             Handler handler = new Handler(Looper.getMainLooper());
                             handler.post(new Runnable() {
 
@@ -766,6 +771,8 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"ACTION_DATA_AVAILABLE",Toast.LENGTH_SHORT).show();
                                 }
                             });
+
+                             */
 
                             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
                         }
@@ -856,6 +863,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
+        /*
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
 
@@ -864,13 +872,15 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,action,Toast.LENGTH_SHORT).show();
             }
         });
+
+         */
         sendBroadcast(intent);
     }
 
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
-
+        /*
         Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
 
@@ -879,6 +889,8 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(MainActivity.this,"IN BROADCST UPDATE",Toast.LENGTH_SHORT).show();
             }
         });
+
+         */
 
         final byte[] data = characteristic.getValue();
         if (data != null && data.length > 0) {
@@ -891,6 +903,7 @@ public class MainActivity extends AppCompatActivity {
                     stringBuilder.toString());
 
             final String dataLenght = String.valueOf(data.length);
+            /*
             Handler handler1 = new Handler(Looper.getMainLooper());
             handler1.post(new Runnable() {
 
@@ -899,6 +912,8 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(MainActivity.this,stringBuilder.toString(),Toast.LENGTH_SHORT).show();
                 }
             });
+
+             */
         } else {
             Handler handler2 = new Handler(Looper.getMainLooper());
             handler2.post(new Runnable() {
