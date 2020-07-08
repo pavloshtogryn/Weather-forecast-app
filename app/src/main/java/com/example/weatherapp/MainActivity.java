@@ -787,23 +787,8 @@ public class MainActivity extends AppCompatActivity {
                         if (data != null && data.length > 0) {
 
                             final String str = new String(data, StandardCharsets.UTF_8);
-                            //String hex = new String(data);
-                            //StringBuilder output = new StringBuilder();
-                            //for (int i = 0; i < hex.length(); i+=2) {
-                            //    String str = hex.substring(i, i+2);
-                            //    output.append((char)Integer.parseInt(str, 16));
-                            //}
-                            //final String recv = output.toString().trim();
-
-                            //final StringBuilder stringBuilder = new StringBuilder(data.length);
-                            //for(byte byteChar : data)
-                             //   stringBuilder.append(String.format("%08x ", byteChar));
 
 
-                            //intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
-                             //      stringBuilder.toString());
-
-                            //final String dataLenght = String.valueOf(data.length);
                             Handler handler1 = new Handler(Looper.getMainLooper());
                             handler1.post(new Runnable() {
 
