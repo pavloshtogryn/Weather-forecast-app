@@ -788,7 +788,7 @@ public class MainActivity extends AppCompatActivity {
 
                             final String str = new String(data, StandardCharsets.UTF_8);
 
-
+                            h.obtainMessage(RECIEVE_MESSAGE, 11, -1, str).sendToTarget();
                             Handler handler1 = new Handler(Looper.getMainLooper());
                             handler1.post(new Runnable() {
 
