@@ -339,7 +339,79 @@ public class MainActivity extends AppCompatActivity {
 
          */
 
+        h = new Handler() {
+            public void handleMessage(android.os.Message msg) {
+                switch (msg.what) {
+                    case RECIEVE_MESSAGE:                                                   // if receive massage
+                        sb.delete(0, sb.length());
+                        //byte[] readBuf = (byte[]) msg.obj;
+                        String readMessage = (String) msg.obj;
+                        int message_len = readMessage.length();
+                        if (message_len > 20){
+                            int endPos = readMessage.indexOf("\n");
+                            sb.append(readMessage.substring(endPos+1,endPos+1+12));
+                        }
+                        //String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
+                        //Date currentDate = new Date();
+                        //DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+                        //String timeText = timeFormat.format(currentDate);
+                        sb.append(readMessage);                                                // append string
+                        //sb.append("---");
+                        //sb.append(timeText);
+                        //message_bar.setText(sb);
+                        int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
+                        //Toast.makeText(MainActivity.this, sb, Toast.LENGTH_LONG).show();
+                        if (endOfLineIndex ==10) {                                            // if end-of-line,
+                            //Toast.makeText(MainActivity.this, strIncom, Toast.LENGTH_LONG).show();
+                            String temp = sb.substring(0 , 2);// extract string
+                            String press = sb.substring(2 , 5);
+                            String hum = sb.substring(5 , 7);
+                            String avg_press = sb.substring(7, endOfLineIndex);
+                            sb.delete(0, sb.length());                                      // and clear
 
+                            if (forecast_flag == false && avg_press.equals("000")){
+                                forecast.setText(R.string.wait_for_forecast);
+                            }else if (forecast_flag == false && !avg_press.equals("000")){
+                                SharedPreferences sPref_city = getSharedPreferences("pref", Context.MODE_PRIVATE);
+                                String savedText = sPref_city.getString("city",null);
+                                if (savedText == null) {
+                                    forecast.setText(R.string.error_enter_and_save_city);
+                                }else {
+                                    prepare_forecast_data(press,avg_press,savedText);
+                                    forecast_flag = true;
+                                }
+                            }
+
+                            String mystring = getResources().getString(R.string.temperature) + temp + "°С";
+                            message_bar.setText(mystring);            // update TextView
+                            mystring = getResources().getString(R.string.pressure) + press + getResources().getString(R.string.mmHg);
+                            pressure.setText(mystring);
+                            mystring = getResources().getString(R.string.humidity) + hum + "%";
+                            humidity.setText(mystring);
+
+                            //btnOff.setEnabled(true);
+                            //btnOn.setEnabled(true);
+                        } else if (endOfLineIndex ==9) {
+                            String temp = sb.substring(0 , 1);// extract string
+                            String press = sb.substring(1 , 4);
+                            String hum = sb.substring(4 , 6 );
+                            String avg_press = sb.substring(6,endOfLineIndex);
+                            sb.delete(0, sb.length());                                      // and clear
+                            String mystring = getResources().getString(R.string.temperature) + temp + "°С";
+                            message_bar.setText(mystring);            // update TextView
+                            mystring = getResources().getString(R.string.pressure) + press + getResources().getString(R.string.mmHg);
+                            pressure.setText(mystring);
+                            mystring = getResources().getString(R.string.humidity) + hum + "%";
+                            humidity.setText(mystring);
+
+                        }
+
+                        //sb.delete(0, sb.length());
+                        //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
+                        break;
+                }
+            };
+        };
 
     }
 
@@ -480,12 +552,14 @@ public class MainActivity extends AppCompatActivity {
                         //Toast.makeText(MainActivity.this, dest_mac, Toast.LENGTH_LONG).show();
                         //mAcceptThread = new AcceptThread();
                         //mAcceptThread.start();
+
                         final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                         bluetoothAdapter.cancelDiscovery();
                         BluetoothDevice device = bluetoothAdapter.getRemoteDevice(dest_mac);
                         BluetoothLeService BluetoothLeServiceClass;
                         BluetoothLeServiceClass = new BluetoothLeService();
                         BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
+
                         ListView listView = findViewById(R.id.lv_listViewDeices);
                         listView.setVisibility(View.INVISIBLE);
 
