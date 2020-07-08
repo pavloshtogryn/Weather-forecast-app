@@ -621,14 +621,6 @@ public class MainActivity extends AppCompatActivity {
                     public void onConnectionStateChange(BluetoothGatt gatt, int status,
                                                         int newState) {
 
-                        Handler handler3 = new Handler(Looper.getMainLooper());
-                        handler3.post(new Runnable() {
-
-                         @Override
-                         public void run() {
-                              Toast.makeText(MainActivity.this,"in onConnectionStateChange",Toast.LENGTH_SHORT).show();
-                         }
-                        });
                         String intentAction;
                         if (newState == BluetoothProfile.STATE_CONNECTED) {
                             intentAction = ACTION_GATT_CONNECTED;
@@ -664,6 +656,14 @@ public class MainActivity extends AppCompatActivity {
                         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                             intentAction = ACTION_GATT_DISCONNECTED;
                             connectionState = STATE_DISCONNECTED;
+
+                            runOnUiThread(new Runnable() {
+                                public void run() {
+
+                                    message_bar.setText(R.string.error_connection);
+                                    //Toast.makeText(MainActivity.this, "connect() method failed", Toast.LENGTH_LONG).show();
+                                }
+                            });
 
                             Handler handler = new Handler(Looper.getMainLooper());
                             handler.post(new Runnable() {

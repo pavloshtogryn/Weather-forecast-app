@@ -25,6 +25,7 @@
     <string name="open_location_settings">Open location settings</string>
     <string name="Cancel">Cancel</string>
     <string name="ble_not_supported">Your device does not support BLE</string>
+    <string name="error_connection"> Failed to establish connection or connection lost</string>
 
     <string name="City_name">Enter your city name</string>
     <string name="search">Search</string>
