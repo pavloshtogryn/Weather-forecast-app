@@ -283,6 +283,13 @@ public class MainActivity extends AppCompatActivity {
             //Toast.makeText(getActivity(), dest_mac, Toast.LENGTH_LONG).show();
             //mAcceptThread = new AcceptThread();
             //mAcceptThread.start();
+
+            final BluetoothAdapter bluetoothAdapter1 = BluetoothAdapter.getDefaultAdapter();
+            bluetoothAdapter1.cancelDiscovery();
+            BluetoothDevice device = bluetoothAdapter1.getRemoteDevice(dest_mac);
+            BluetoothLeService BluetoothLeServiceClass;
+            BluetoothLeServiceClass = new BluetoothLeService();
+            BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
         }
 
 
@@ -311,15 +318,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnReconnect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        //btnReconnect.setOnClickListener(new View.OnClickListener() {
+         //   @Override
+         //   public void onClick(View v) {
 
-                BluetoothLeService BluetoothLeServiceClass;
-                BluetoothLeServiceClass = new BluetoothLeService();
-                BluetoothLeServiceClass.close();
-            }
-        });
+          //      BluetoothLeService.close();
+         //   }
+       // });
 
 
         h = new Handler() {
@@ -431,6 +436,14 @@ public class MainActivity extends AppCompatActivity {
                     //Toast.makeText(MainActivity.this, dest_mac, Toast.LENGTH_LONG).show();
                     //mAcceptThread = new AcceptThread();
                     //mAcceptThread.start();
+
+                    final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    bluetoothAdapter.cancelDiscovery();
+                    BluetoothDevice device = bluetoothAdapter.getRemoteDevice(dest_mac);
+                    BluetoothLeService BluetoothLeServiceClass;
+                    BluetoothLeServiceClass = new BluetoothLeService();
+                    BluetoothGatt gatt = device.connectGatt(MainActivity.this, false, BluetoothLeServiceClass.gattCallback);
+
                     ListView listView = findViewById(R.id.lv_listViewDeices);
                     listView.setVisibility(View.INVISIBLE);
 
@@ -640,7 +653,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"Disconnected from GATT server.",Toast.LENGTH_SHORT).show();
                                 }
                             });
-
+                            close();
                             /* Log.i(TAG, "Disconnected from GATT server."); */
                             broadcastUpdate(intentAction);
                         }
@@ -772,14 +785,14 @@ public class MainActivity extends AppCompatActivity {
                             final String str = new String(data, StandardCharsets.UTF_8);
 
                             h.obtainMessage(RECIEVE_MESSAGE, 11, -1, str).sendToTarget();
-                            Handler handler1 = new Handler(Looper.getMainLooper());
-                            handler1.post(new Runnable() {
+                            //Handler handler1 = new Handler(Looper.getMainLooper());
+                            //handler1.post(new Runnable() {
 
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this,str,Toast.LENGTH_SHORT).show();
-                                }
-                            });
+                              //  @Override
+                            //    public void run() {
+                             //       Toast.makeText(MainActivity.this,str,Toast.LENGTH_SHORT).show();
+                            //    }
+                          //  });
                         } else {
                             Handler handler2 = new Handler(Looper.getMainLooper());
                             handler2.post(new Runnable() {
@@ -822,11 +835,29 @@ public class MainActivity extends AppCompatActivity {
                 };
 
         public void close() {
+            //stopSelf();
             if (bluetoothGatt == null) {
+                //Handler handler1 = new Handler(Looper.getMainLooper());
+                //handler1.post(new Runnable() {
+
+                //    @Override
+                 //   public void run() {
+                 //       Toast.makeText(MainActivity.this,"Closing error",Toast.LENGTH_SHORT).show();
+                //    }
+               // });
                 return;
             }
             bluetoothGatt.close();
             bluetoothGatt = null;
+
+            //Handler handler = new Handler(Looper.getMainLooper());
+           // handler.post(new Runnable() {
+
+             //   @Override
+             //   public void run() {
+             //       Toast.makeText(MainActivity.this,"Closed successfully",Toast.LENGTH_SHORT).show();
+            //    }
+           // });
         }
 
         @Nullable
