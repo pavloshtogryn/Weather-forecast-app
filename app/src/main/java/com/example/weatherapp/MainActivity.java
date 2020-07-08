@@ -310,34 +310,17 @@ public class MainActivity extends AppCompatActivity {
                 bluetoothAdapter.cancelDiscovery();
             }
         });
-        /*
+
         btnReconnect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    mAcceptThread.cancel();
-                }catch (NullPointerException e){
 
-                }
-                try {
-                    mConnectedThread.cancel();
-                } catch (NullPointerException e){
-
-                }
-                mAcceptThread=null;
-                mConnectedThread=null;
-                try {
-                    TimeUnit.MILLISECONDS.sleep(500);
-                } catch (InterruptedException e){
-
-                }
-
-                mAcceptThread = new AcceptThread();
-                mAcceptThread.start();
+                BluetoothLeService BluetoothLeServiceClass;
+                BluetoothLeServiceClass = new BluetoothLeService();
+                BluetoothLeServiceClass.close();
             }
         });
 
-         */
 
         h = new Handler() {
             public void handleMessage(android.os.Message msg) {
@@ -837,6 +820,14 @@ public class MainActivity extends AppCompatActivity {
                      */
 
                 };
+
+        public void close() {
+            if (bluetoothGatt == null) {
+                return;
+            }
+            bluetoothGatt.close();
+            bluetoothGatt = null;
+        }
 
         @Nullable
         @Override
