@@ -676,7 +676,10 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.makeText(MainActivity.this,"Disconnected from GATT server.",Toast.LENGTH_SHORT).show();
                                 }
                             });
-                            close();
+
+                            gatt.close();
+                            gatt = null;
+
                             /* Log.i(TAG, "Disconnected from GATT server."); */
                             broadcastUpdate(intentAction);
                         }
@@ -810,10 +813,13 @@ public class MainActivity extends AppCompatActivity {
                             h.obtainMessage(RECIEVE_MESSAGE, 11, -1, str).sendToTarget();
 
                             if (received_counter >= 3) {
-                                String disconnect_code = "DONE";
-                                characteristic.setValue(disconnect_code);
-                                boolean status = gatt.writeCharacteristic(characteristic);
+                                //String disconnect_code = "DONE";
+                                //characteristic.setValue(disconnect_code);
+                                //boolean status = gatt.writeCharacteristic(characteristic);
                                 received_counter = 0;
+                                gatt.disconnect();
+                                gatt.close();
+                                gatt = null;
                             }
                             //Handler handler1 = new Handler(Looper.getMainLooper());
                             //handler1.post(new Runnable() {
