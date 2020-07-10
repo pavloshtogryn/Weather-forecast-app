@@ -809,7 +809,7 @@ public class MainActivity extends AppCompatActivity {
 
                             h.obtainMessage(RECIEVE_MESSAGE, 11, -1, str).sendToTarget();
 
-                            if (received_counter == 3) {
+                            if (received_counter >= 3) {
                                 String disconnect_code = "DONE";
                                 characteristic.setValue(disconnect_code);
                                 boolean status = gatt.writeCharacteristic(characteristic);
