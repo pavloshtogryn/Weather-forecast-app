@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sPref1;
     final String SAVED_TEXT = "";
 
+    byte received_counter = 0;
+
     Handler h;
     final int RECIEVE_MESSAGE = 1;        // Status  for Handler
     private StringBuilder sb = new StringBuilder();
@@ -350,6 +352,7 @@ public class MainActivity extends AppCompatActivity {
                         //message_bar.setText(sb);
                         int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
                         //Toast.makeText(MainActivity.this, sb, Toast.LENGTH_LONG).show();
+                        received_counter +=1;
                         if (endOfLineIndex ==10) {                                            // if end-of-line,
                             //Toast.makeText(MainActivity.this, strIncom, Toast.LENGTH_LONG).show();
                             String temp = sb.substring(0 , 2);// extract string
@@ -805,6 +808,13 @@ public class MainActivity extends AppCompatActivity {
                             final String str = new String(data, StandardCharsets.UTF_8);
 
                             h.obtainMessage(RECIEVE_MESSAGE, 11, -1, str).sendToTarget();
+
+                            if (received_counter == 3) {
+                                String disconnect_code = "DONE";
+                                characteristic.setValue(disconnect_code);
+                                boolean status = gatt.writeCharacteristic(characteristic);
+                                received_counter = 0;
+                            }
                             //Handler handler1 = new Handler(Looper.getMainLooper());
                             //handler1.post(new Runnable() {
 
