@@ -11,7 +11,7 @@ import java.net.UnknownHostException;
 import java.util.Scanner;
 
 public class NetwirkUtils {
-    private static final String HEROKU_API_BASE_URL_SIN="https://blooming-basin-65986.herokuapp.com";
+    private static final String HEROKU_API_BASE_URL_SIN="https://xxxxxxxxxxx.herokuapp.com";
     private static final String HEROKU_CUR_WEATH_DATA_SIN="/sinoptik";
     private static final String PARAM_CITY_NAME="q";
 
@@ -39,7 +39,7 @@ public class NetwirkUtils {
                 .buildUpon()
                 .appendQueryParameter(PARAM_CITY_NAME, city_name)
                 .appendQueryParameter(PARAM_UNITS, "metric")
-                .appendQueryParameter(PARAM_KEY, "79b0339c76806b81dea942bf457f0d43")
+                .appendQueryParameter(PARAM_KEY, "")
                 .build();
         URL url = null;
         try {
