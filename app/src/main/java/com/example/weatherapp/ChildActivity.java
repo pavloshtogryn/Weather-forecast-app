@@ -126,12 +126,8 @@ public class ChildActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
 
             String mainWeather = null;
-           /* search_results_sin.setVisibility(View.VISIBLE);
-            search_results_sin.setText(response);
-        }
-    }*/
+           
             System.out.println("RESPONSE =="+response);
-            //Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
             if (response != null && response.equals("404")){
                 showCityErrorTextViewSin();
             }else if (response != null && !response.equals("")) {
@@ -181,12 +177,8 @@ public class ChildActivity extends AppCompatActivity {
             String humidity = null;
             String pressure =null;
             String mainWeather = null;
-           /* search_results_sin.setVisibility(View.VISIBLE);
-            search_results_sin.setText(response);
-        }
-    }*/
+           
             System.out.println("RESPONSE =="+response);
-            //Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
             if (response != null && response.equals("404")){
                 showCityErrorTextViewOwm();
             }else if (response != null && !response.equals("")) {
@@ -222,40 +214,6 @@ public class ChildActivity extends AppCompatActivity {
         }
     }
 
-/*For bug with disapearing data when change orientation
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putFloat("temp", Float.parseFloat(temp));
-        outState.putFloat("hum", Float.parseFloat(humidity));
-        Toast.makeText(getActivity(), "On save", Toast.LENGTH_LONG).show();
-        //Log.d(LOG_TAG, "onSaveInstanceState");
-    }
-
-
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-
-        // Check to see if we have a frame in which to embed the details
-        // fragment directly in the containing UI.
-
-
-        if (savedInstanceState != null) {
-            // Restore last state for checked position.
-            temp = Float.toString(savedInstanceState.getFloat("temp"));
-            humidity = Float.toString(savedInstanceState.getFloat("hum"));
-            String resultString = "Temperature: " + temp + "\n" + "Humidity:" + humidity;
-            search_results_sin.setText(resultString);
-            showResultTextViev();
-            Toast.makeText(getActivity(), "Saved instance", Toast.LENGTH_LONG).show();
-        }else{
-            Toast.makeText(getActivity(), "Saved instance NULL", Toast.LENGTH_LONG).show();
-        }
-
-
-    }
- */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -280,7 +238,6 @@ public class ChildActivity extends AppCompatActivity {
             public void onClick(View view) {
                 URL generatedUrl_SINOTIK = generateURL_SINOPTIK(search_field.getText().toString());
                 URL generatedUrl_OWM = generateURL_OWM(search_field.getText().toString());
-                //search_results_sin.setText(generatedUrl.toString());
                 new WQueryTask_SINOPTIK().execute(generatedUrl_SINOTIK);
                 new WQueryTask_OWM().execute(generatedUrl_OWM);
                 chosen_city = search_field.getText().toString();
@@ -293,7 +250,6 @@ public class ChildActivity extends AppCompatActivity {
                     ed.commit();
                     String city = chosen_city.substring(0, 1).toUpperCase() + chosen_city.substring(1);
                     current_city_field.setText("Your city: " + city);
-                    //Toast.makeText(getActivity(), "City saved in Search button", Toast.LENGTH_LONG).show();
 
                 } else if (chosen_city.equals("")){
 
@@ -349,7 +305,6 @@ public class ChildActivity extends AppCompatActivity {
     public void onPause(){
         super.onPause();
         saveCity();
-        //Toast.makeText(getActivity(), "Pause", Toast.LENGTH_LONG).show();
 
     }
 
@@ -362,7 +317,6 @@ public class ChildActivity extends AppCompatActivity {
             SharedPreferences.Editor ed = sPref_city.edit();
             ed.putString("city", chosen_city);
             ed.commit();
-            //Toast.makeText(getActivity(), "City saved", Toast.LENGTH_LONG).show();
 
         }
     }

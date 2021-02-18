@@ -86,13 +86,9 @@ public class MainActivity extends AppCompatActivity {
     Button btnReconnect;
     static final UUID HM_SERVICE_UUID = UUID.fromString("0000FFE0-0000-1000-8000-00805F9B34FB");
     static  final  UUID HM_CHARACTERISTIC_UUID = UUID.fromString("0000FFE1-0000-1000-8000-00805F9B34FB");
-    //private AcceptThread mAcceptThread;
-    //private ConnectedThread mConnectedThread;
     private CheckBox mCheckBox;
-    //Handler handler7 = new Handler();
     String dest_mac;
     boolean forecast_flag = false;
-    //boolean async_task_flag = false;
     String global_press;
     String global_avg_press;
 
@@ -109,10 +105,7 @@ public class MainActivity extends AppCompatActivity {
     private Button changeActivityButton;
 
     class getWindSINOPTIK extends AsyncTask<URL, Void, String> {
-        //@Override
-        //protected void onPreExecute() {
-        //  loading.setVisibility(View.VISIBLE);
-        //}
+        
 
         @Override
         protected String doInBackground(URL... urls) {
@@ -129,16 +122,12 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String response) {
 
             String mainWeather = null;
-           /* search_results_sin.setVisibility(View.VISIBLE);
-            search_results_sin.setText(response);
-        }
-    }*/
+          
             System.out.println("RESPONSE =="+response);
-            //Toast.makeText(getActivity(), response, Toast.LENGTH_LONG).show();
+           
             if (response != null && response.equals("404")){
                 forecast.setText(R.string.unknown_city_error_message);
-                //forecast_flag = false;
-                //showCityErrorTextViewSin();
+                
             }else if (response != null && !response.equals("")) {
                 try {
                     JSONObject jsonResponse = new JSONObject(response);
@@ -149,18 +138,12 @@ public class MainActivity extends AppCompatActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                //String resultString = "Sinoptik"+"\n"+"Temperature: " + temp_sin + "\n" + "Humidity: " + humidity_sin+"%"+ "\n" + "Pressure: " + pressure_sin + "mm Hg" + "\n";
-
-                //forecast.setText(wind);
-                //search_results_sin.setText(resultString);
-
-                //showResultTextViev();
+                
             } else {
                 forecast.setText(R.string.other_error_message);
-                //forecast_flag = false;
-                //showOtherErrorTextViewSin();
+                
             }
-            //loading.setVisibility(View.INVISIBLE);
+            
 
         }
     }
@@ -204,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
-            //flag=true;
+            
             message_bar.setText(R.string.bluetooth_enabled);
             message_bar.setVisibility(View.VISIBLE);
 
@@ -268,13 +251,8 @@ public class MainActivity extends AppCompatActivity {
                                 .setNegativeButton(R.string.Cancel,null)
                                 .show();
             }
-            //Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-            //startActivity(intent);
+            
         }
-
-
-
-
 
         sPref1 = getPreferences(MODE_PRIVATE);
         String savedText = sPref1.getString(SAVED_TEXT,null);
@@ -282,9 +260,6 @@ public class MainActivity extends AppCompatActivity {
             mCheckBox = findViewById(R.id.cb_remember_device_checkbox);
             mCheckBox.setVisibility(View.INVISIBLE);
             dest_mac = savedText;
-            //Toast.makeText(getActivity(), dest_mac, Toast.LENGTH_LONG).show();
-            //mAcceptThread = new AcceptThread();
-            //mAcceptThread.start();
 
             final BluetoothAdapter bluetoothAdapter1 = BluetoothAdapter.getDefaultAdapter();
             bluetoothAdapter1.cancelDiscovery();
@@ -321,13 +296,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //btnReconnect.setOnClickListener(new View.OnClickListener() {
-         //   @Override
-         //   public void onClick(View v) {
-
-          //      BluetoothLeService.close();
-         //   }
-       // });
 
 
         h = new Handler() {
@@ -342,19 +310,11 @@ public class MainActivity extends AppCompatActivity {
                             int endPos = readMessage.indexOf("\n");
                             sb.append(readMessage.substring(endPos+1,endPos+1+12));
                         }
-                        //String strIncom = new String(readBuf, 0, msg.arg1);                 // create string from bytes array
-                        //Date currentDate = new Date();
-                        //DateFormat timeFormat = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-                        //String timeText = timeFormat.format(currentDate);
+                        
                         sb.append(readMessage);                                                // append string
-                        //sb.append("---");
-                        //sb.append(timeText);
-                        //message_bar.setText(sb);
                         int endOfLineIndex = sb.indexOf("\r\n");                            // determine the end-of-line
-                        //Toast.makeText(MainActivity.this, sb, Toast.LENGTH_LONG).show();
                         received_counter +=1;
                         if (endOfLineIndex ==10) {                                            // if end-of-line,
-                            //Toast.makeText(MainActivity.this, strIncom, Toast.LENGTH_LONG).show();
                             String temp = sb.substring(0 , 2);// extract string
                             String press = sb.substring(2 , 5);
                             String hum = sb.substring(5 , 7);
@@ -381,8 +341,7 @@ public class MainActivity extends AppCompatActivity {
                             mystring = getResources().getString(R.string.humidity) + hum + "%";
                             humidity.setText(mystring);
 
-                            //btnOff.setEnabled(true);
-                            //btnOn.setEnabled(true);
+                            
                         } else if (endOfLineIndex ==9) {
                             String temp = sb.substring(0 , 1);// extract string
                             String press = sb.substring(1 , 4);
@@ -398,8 +357,7 @@ public class MainActivity extends AppCompatActivity {
 
                         }
 
-                        //sb.delete(0, sb.length());
-                        //Log.d(TAG, "...String:"+ sb.toString() +  "Byte:" + msg.arg1 + "...");
+                        
                         break;
                 }
             };
@@ -437,9 +395,6 @@ public class MainActivity extends AppCompatActivity {
                     // установка текста элемента TextView
                     dest_mac = selectedItem.substring(selectedItem.length() - 17, selectedItem.length());
                     saveMac();
-                    //Toast.makeText(MainActivity.this, dest_mac, Toast.LENGTH_LONG).show();
-                    //mAcceptThread = new AcceptThread();
-                    //mAcceptThread.start();
 
                     final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                     bluetoothAdapter.cancelDiscovery();
@@ -456,37 +411,24 @@ public class MainActivity extends AppCompatActivity {
             });
         } else {
             message_bar.setText("List of BT devices is empty");
-            //Toast.makeText(this, "List of BT devices is empty", Toast.LENGTH_LONG).show();
         }
 
-        //btnPaired.setVisibility(View.INVISIBLE);
-        //btnDiscovery.setVisibility(View.VISIBLE);
 
     }
 
-    //private void DiscoveryList() {
-    // startDiscovery();
-    //}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Check which request we're responding to
-        // Make sure the request was successful
-        //BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+       
 
         if (resultCode == RESULT_OK) {
-            // The user picked a contact.
-            // The Intent's data Uri identifies which contact was selected.
-            //flag=true;
+
             message_bar.setText(R.string.bluetooth_enabled);
             message_bar.setVisibility(View.VISIBLE);
             sPref1 = getPreferences(MODE_PRIVATE);
             String savedText = sPref1.getString(SAVED_TEXT,null);
             if (savedText != null) {
                 dest_mac = savedText;
-                //Toast.makeText(getActivity(), dest_mac, Toast.LENGTH_LONG).show();
-                //mAcceptThread = new AcceptThread();
-                //mAcceptThread.start();
 
                 final BluetoothAdapter bluetoothAdapter1 = BluetoothAdapter.getDefaultAdapter();
                 bluetoothAdapter1.cancelDiscovery();
@@ -508,7 +450,6 @@ public class MainActivity extends AppCompatActivity {
         mCheckBox = findViewById(R.id.cb_remember_device_checkbox);
         mCheckBox.setVisibility(View.VISIBLE);
         //Объявляем адаптер
-        //Toast.makeText(MainActivity.this, "ADAPTER DECLARATION", Toast.LENGTH_LONG).show();
         final ArrayAdapter<String> mArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
 
         final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -536,19 +477,11 @@ public class MainActivity extends AppCompatActivity {
                     // Discovery has found a device. Get the BluetoothDevice
                     // object and its info from the Intent.
 
-
                     mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 
-
-                    //Toast.makeText(getApplicationContext(), "HA-HA1111", Toast.LENGTH_LONG).show();
-                    //String deviceName = device.getName();
-                    //Toast.makeText(MainActivity.this, "Found device " + deviceName, Toast.LENGTH_LONG).show();
-                    //message_bar.setText(deviceName);
-                    //message_bar.setVisibility(View.VISIBLE);
-                    //String deviceHardwareAddress = device.getAddress(); // MAC address
                 }
 
-                //if (discoveryFinishFlag == true) {
+                
                 listView.setAdapter(mArrayAdapter);
                 listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -558,9 +491,6 @@ public class MainActivity extends AppCompatActivity {
                         // установка текста элемента TextView
                         dest_mac = selectedItem.substring(selectedItem.length() - 17, selectedItem.length());
                         saveMac();
-                        //Toast.makeText(MainActivity.this, dest_mac, Toast.LENGTH_LONG).show();
-                        //mAcceptThread = new AcceptThread();
-                        //mAcceptThread.start();
 
                         final BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
                         bluetoothAdapter.cancelDiscovery();
@@ -585,8 +515,6 @@ public class MainActivity extends AppCompatActivity {
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
         registerReceiver(receiver, filter);
         bluetoothAdapter.startDiscovery();
-        //btnDiscovery.setVisibility(View.INVISIBLE);
-        //btnPaired.setVisibility(View.VISIBLE);
 
     }
 
@@ -628,34 +556,9 @@ public class MainActivity extends AppCompatActivity {
                         if (newState == BluetoothProfile.STATE_CONNECTED) {
                             intentAction = ACTION_GATT_CONNECTED;
                             connectionState = STATE_CONNECTED;
-                            broadcastUpdate(intentAction);
-                            //Handler handler = new Handler(Looper.getMainLooper());
-                            //handler.post(new Runnable() {
-
-                               // @Override
-                               // public void run() {
-                              //      Toast.makeText(MainActivity.this,"Connected to GATT server.",Toast.LENGTH_SHORT).show();
-                               // }
-                            //});
-
-                            //Log.i(TAG, "Connected to GATT server.");
-                            //Log.i(TAG, "Attempting to start service discovery:" +bluetoothGatt.discoverServices());
+                            broadcastUpdate(intentAction);                            
                             gatt.discoverServices();
-                            //try {
-                           //     TimeUnit.SECONDS.sleep(2);
-                            //}catch (InterruptedException e){
-
-                            //}
-
-                            //getDeviceInformation();
-
-
-
-
-
-
-
-
+							
                         } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                             intentAction = ACTION_GATT_DISCONNECTED;
                             connectionState = STATE_DISCONNECTED;
@@ -664,7 +567,7 @@ public class MainActivity extends AppCompatActivity {
                                 public void run() {
 
                                     message_bar.setText(R.string.error_connection);
-                                    //Toast.makeText(MainActivity.this, "connect() method failed", Toast.LENGTH_LONG).show();
+
                                 }
                             });
 
@@ -679,8 +582,6 @@ public class MainActivity extends AppCompatActivity {
 
                             gatt.close();
                             gatt = null;
-
-                            /* Log.i(TAG, "Disconnected from GATT server."); */
                             broadcastUpdate(intentAction);
                         }
                     }
@@ -689,25 +590,12 @@ public class MainActivity extends AppCompatActivity {
                     // New services discovered
                     public void onServicesDiscovered(BluetoothGatt gatt, final int status) {
                         if (status == BluetoothGatt.GATT_SUCCESS) {
-                            /*
-                            Handler handler = new Handler(Looper.getMainLooper());
-                            handler.post(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this,"DISCOVERED SUCCESFULLY",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                             */
                             broadcastUpdate(ACTION_GATT_SERVICES_DISCOVERED);
 
                             BluetoothGattCharacteristic characteristic =
                                     gatt.getService(HM_SERVICE_UUID)
                                             .getCharacteristic(HM_CHARACTERISTIC_UUID);
 
-                            //private BluetoothGatt bluetoothGatt;
-                            //BluetoothGattCharacteristic characteristic;
                             boolean enabled=true;
 
                             gatt.setCharacteristicNotification(characteristic, enabled);
@@ -715,51 +603,7 @@ public class MainActivity extends AppCompatActivity {
                             BluetoothGattDescriptor descriptor = characteristic.getDescriptor(HM_CHARACTERISTIC_UUID);
                             descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
                             gatt.writeDescriptor(descriptor);
-                            /*
-                            if (characteristic != null){
-                                Handler handler1 = new Handler(Looper.getMainLooper());
-                                handler1.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this,"SUCCESS GETTING CHARACTER",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }else if (characteristic == null){
-                                Handler handler2 = new Handler(Looper.getMainLooper());
-                                handler2.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this,"FAIL GETTING CHARACTER",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                            */
-
                             Boolean is_character_read = gatt.readCharacteristic(characteristic);
-                            /*
-                            if (is_character_read == true){
-                                Handler handler1 = new Handler(Looper.getMainLooper());
-                                handler1.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this,"READ CHAACTER SUCCESS",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }else {
-                                Handler handler2 = new Handler(Looper.getMainLooper());
-                                handler2.post(new Runnable() {
-
-                                    @Override
-                                    public void run() {
-                                        Toast.makeText(MainActivity.this,"READ CHAACTER FAIL",Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-
-                            */
 
                         } else {
 
@@ -772,7 +616,6 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
 
-                           // Log.w(TAG, "onServicesDiscovered received: " + status);
                         }
                     }
 
@@ -784,18 +627,6 @@ public class MainActivity extends AppCompatActivity {
                                                      BluetoothGattCharacteristic characteristic,
                                                      int status) {
                         if (status == BluetoothGatt.GATT_SUCCESS) {
-                            /*
-                            Handler handler = new Handler(Looper.getMainLooper());
-                            handler.post(new Runnable() {
-
-                                @Override
-                                public void run() {
-                                    Toast.makeText(MainActivity.this,"ACTION_DATA_AVAILABLE",Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-                             */
-
                             broadcastUpdate(ACTION_DATA_AVAILABLE, characteristic);
                         }
                     }
@@ -804,7 +635,6 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
 
-                        //processData(characteristic.getValue());
                         final byte[] data = characteristic.getValue();
                         if (data != null && data.length > 0) {
 
@@ -813,22 +643,11 @@ public class MainActivity extends AppCompatActivity {
                             h.obtainMessage(RECIEVE_MESSAGE, 11, -1, str).sendToTarget();
 
                             if (received_counter >= 3) {
-                                //String disconnect_code = "DONE";
-                                //characteristic.setValue(disconnect_code);
-                                //boolean status = gatt.writeCharacteristic(characteristic);
                                 received_counter = 0;
                                 gatt.disconnect();
                                 gatt.close();
                                 gatt = null;
                             }
-                            //Handler handler1 = new Handler(Looper.getMainLooper());
-                            //handler1.post(new Runnable() {
-
-                              //  @Override
-                            //    public void run() {
-                             //       Toast.makeText(MainActivity.this,str,Toast.LENGTH_SHORT).show();
-                            //    }
-                          //  });
                         } else {
                             Handler handler2 = new Handler(Looper.getMainLooper());
                             handler2.post(new Runnable() {
@@ -841,59 +660,14 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
 
-
-                    /*
-                    @Override
-                    public void onDescriptorWrite(BluetoothGatt gatt, BluetoothGattDescriptor descriptor, int status){
-                        BluetoothGattCharacteristic characteristic =
-                                gatt.getService(HM_SERVICE_UUID)
-                                        .getCharacteristic(HM_CHARACTERISTIC_UUID);
-                        characteristic.setValue(new byte[]{1, 1});
-                        gatt.writeCharacteristic(characteristic);
-                    }
-
-                    @Override
-                    public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
-
-                        Handler handler = new Handler(Looper.getMainLooper());
-                        handler.post(new Runnable() {
-
-                            @Override
-                            public void run() {
-                                Toast.makeText(MainActivity.this,"HELLO",Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        //processData(characteristic.getValue());
-                    }
-
-                     */
-
                 };
 
         public void close() {
-            //stopSelf();
             if (bluetoothGatt == null) {
-                //Handler handler1 = new Handler(Looper.getMainLooper());
-                //handler1.post(new Runnable() {
-
-                //    @Override
-                 //   public void run() {
-                 //       Toast.makeText(MainActivity.this,"Closing error",Toast.LENGTH_SHORT).show();
-                //    }
-               // });
                 return;
             }
             bluetoothGatt.close();
             bluetoothGatt = null;
-
-            //Handler handler = new Handler(Looper.getMainLooper());
-           // handler.post(new Runnable() {
-
-             //   @Override
-             //   public void run() {
-             //       Toast.makeText(MainActivity.this,"Closed successfully",Toast.LENGTH_SHORT).show();
-            //    }
-           // });
         }
 
         @Nullable
@@ -906,35 +680,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void broadcastUpdate(final String action) {
         final Intent intent = new Intent(action);
-        /*
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this,action,Toast.LENGTH_SHORT).show();
-            }
-        });
-
-         */
         sendBroadcast(intent);
     }
 
     private void broadcastUpdate(final String action,
                                  final BluetoothGattCharacteristic characteristic) {
         final Intent intent = new Intent(action);
-        /*
-        Handler handler = new Handler(Looper.getMainLooper());
-        handler.post(new Runnable() {
-
-            @Override
-            public void run() {
-                Toast.makeText(MainActivity.this,"IN BROADCST UPDATE",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-         */
-
         final byte[] data = characteristic.getValue();
         if (data != null && data.length > 0) {
 
@@ -946,17 +697,6 @@ public class MainActivity extends AppCompatActivity {
                     stringBuilder.toString());
 
             final String dataLenght = String.valueOf(data.length);
-            /*
-            Handler handler1 = new Handler(Looper.getMainLooper());
-            handler1.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this,stringBuilder.toString(),Toast.LENGTH_SHORT).show();
-                }
-            });
-
-             */
         } else {
             Handler handler2 = new Handler(Looper.getMainLooper());
             handler2.post(new Runnable() {
@@ -968,58 +708,6 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-        // This is special handling for the Heart Rate Measurement profile. Data
-        // parsing is carried out as per profile specifications.
-        /*
-        if (HM_CHARACTERISTIC_UUID.equals(characteristic.getUuid())) {
-            Handler handler1 = new Handler(Looper.getMainLooper());
-            handler1.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this,"EQUALS",Toast.LENGTH_SHORT).show();
-                }
-            });
-
-
-            int flag = characteristic.getProperties();
-            int format = -1;
-            if ((flag & 0x01) != 0) {
-                format = BluetoothGattCharacteristic.FORMAT_UINT16;
-                //Log.d(TAG, "Heart rate format UINT16.");
-            } else {
-                format = BluetoothGattCharacteristic.FORMAT_UINT8;
-                //Log.d(TAG, "Heart rate format UINT8.");
-            }
-            final int heartRate = characteristic.getIntValue(format, 1);
-            //Log.d(TAG, String.format("Received heart rate: %d", heartRate));
-            intent.putExtra(EXTRA_DATA, String.valueOf(heartRate));
-        } else {
-            Handler handler2 = new Handler(Looper.getMainLooper());
-            handler2.post(new Runnable() {
-
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this,"NOT EQUALS",Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            // For all other profiles, writes the data formatted in HEX.
-            final byte[] data = characteristic.getValue();
-            if (data != null && data.length > 0) {
-                Toast.makeText(MainActivity.this,"DATA NOT NULL",Toast.LENGTH_SHORT).show();
-                final StringBuilder stringBuilder = new StringBuilder(data.length);
-                for(byte byteChar : data)
-                    stringBuilder.append(String.format("%02X ", byteChar));
-                intent.putExtra(EXTRA_DATA, new String(data) + "\n" +
-                        stringBuilder.toString());
-            } else {
-                Toast.makeText(MainActivity.this,"DATA == NULL",Toast.LENGTH_SHORT).show();
-            }
-
-
-        }
-        */
         sendBroadcast(intent);
     }
 
@@ -1028,19 +716,13 @@ public class MainActivity extends AppCompatActivity {
         public void onReceive(Context context, Intent intent) {
             final String action = intent.getAction();
             if (BluetoothLeService.ACTION_GATT_CONNECTED.equals(action)) {
-                //connected = true;
-                //updateConnectionState(R.string.connected);
+
                 invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
-                //connected = false;
-                //updateConnectionState(R.string.disconnected);
-                //invalidateOptionsMenu();
-                //clearUI();
+
             } else if (BluetoothLeService.
                     ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
-                // Show all the supported services and characteristics on the
-                // user interface.
-                //displayGattServices(bluetoothLeService.getSupportedGattServices());
+
             } else if (BluetoothLeService.ACTION_DATA_AVAILABLE.equals(action)) {
                 final String recv = intent.getStringExtra(BluetoothLeService.EXTRA_DATA);
                 Handler handler = new Handler(Looper.getMainLooper());
@@ -1059,7 +741,6 @@ public class MainActivity extends AppCompatActivity {
     public void make_forecast(String wind){
 
         int press_trend = 1;
-        //forecast.setText(wind + " " + global_press + " " + global_avg_press);
         Date currentDate = new Date();
         DateFormat timeFormat = new SimpleDateFormat("MM", Locale.getDefault());
         String monthText = timeFormat.format(currentDate);
@@ -1105,23 +786,12 @@ public class MainActivity extends AppCompatActivity {
         }else{
             z = 0.2314 * (1030.81 - pressHPA);
             z = z + 0.5;
-            //z = Math.round(z);
             letterForecast = stable_correction(z);
         }
 
-        //forecast.setText(letterForecast);
-        //forecast.setText(String.valueOf(z));
         String stringForecast = forecastToString(letterForecast);
-
         forecast.setText(stringForecast);
 
-        //int intPressHPA = (int) Math.round(pressHPA);
-        
-        //if (monthInt >= 4 && monthInt<=9){
-            //forecast.setText("Summer");
-        //}else{
-            //forecast.setText("Winter");
-        //}
     }
     public void prepare_forecast_data (String press, String avg_press, String saved_text){
 
@@ -1354,18 +1024,16 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onDestroy() {
-        //getActivity().unregisterReceiver(receiver);
+
         super.onDestroy();
 
-        // Don't forget to unregister the ACTION_FOUND receiver.
 
     }
 
     @Override
     public void onPause(){
-        //getActivity().unregisterReceiver(receiver);
+
         super.onPause();
-        //Toast.makeText(getActivity(), "onPause", Toast.LENGTH_SHORT).show();
         saveMac();
     }
     @Override
@@ -1373,10 +1041,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
     }
 
-    //public void onSaveInstanceState(Bundle outState) {
-    //    super.onSaveInstanceState(outState);
-        //saveMac();
-   // }
 
     public void saveMac (){
         mCheckBox = findViewById(R.id.cb_remember_device_checkbox);
